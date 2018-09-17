@@ -8,17 +8,39 @@ version '1.0.0-SNAPSHOT'
 sourceCompatibility = 1.8
 
 repositories {
-    mavenCentral()
+    maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
+
 }
 
-
+jar {
+    baseName = 'myrpc-provider'
+    version =  '1.0.0'
+}
 
 
 dependencies {
     def springVersion = '4.3.14.RELEASE'
 
     compile("org.springframework:spring-context:$springVersion")
-    testCompile("junit:junit:4.11")
+    compile("org.springframework:spring-aop:$springVersion")
+    compile("org.springframework:spring-beans:$springVersion")
+    compile("org.springframework:spring-core:$springVersion")
+    compile("org.springframework:spring-context-support:$springVersion")
+    compile("org.springframework:spring-expression:$springVersion")
+    compile("org.springframework:spring-jms:$springVersion")
+    compile("org.springframework:spring-orm:$springVersion")
+    compile("org.springframework:spring-oxm:$springVersion")
+    compile("org.springframework:spring-web:$springVersion")
+    compile("org.springframework:spring-webmvc:$springVersion")
+    compile("org.springframework:spring-test:$springVersion")
+
+    compile("org.slf4j:slf4j-api:1.7.10")
+    compile("com.alibaba:fastjson:1.2.37")
+    compile("io.netty:netty-all:5.0.0.Alpha2")
+
+
+
+    compile("junit:junit:4.12")
 
 
 
