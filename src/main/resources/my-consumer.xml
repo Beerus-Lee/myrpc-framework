@@ -8,5 +8,5 @@
        xmlns:micheal="http://www.my.com/schema/soa"
         default-lazy-init="true">
     <micheal:reference id="demoService" check="false" interface="com.my.micheal.demo.service.DemoService"/>
-
+    <micheal:protocol></micheal:protocol>
 </beans>

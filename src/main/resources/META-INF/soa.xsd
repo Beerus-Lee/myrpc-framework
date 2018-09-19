@@ -18,11 +18,12 @@
         <xsd:attribute name="id" type="xsd:string"></xsd:attribute>
         <xsd:attribute name="interface" type="xsd:string"></xsd:attribute>
         <xsd:attribute name="check" type="xsd:string"></xsd:attribute>
+        <xsd:attribute name="protocol" type="xsd:string"></xsd:attribute>
     </xsd:complexType>
 </xsd:element>
 
 
-<xsd:element name="protocal">
+<xsd:element name="protocol">
     <xsd:complexType>
         <xsd:attribute name="id" type="xsd:string"></xsd:attribute>
         <xsd:attribute name="name" type="xsd:string"></xsd:attribute>
