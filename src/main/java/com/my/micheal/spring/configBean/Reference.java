@@ -3,17 +3,21 @@ package com.my.micheal.spring.configBean;
 import com.my.micheal.spring.advice.InvokeInvocationHandler;
 import com.my.micheal.spring.invoke.HttpInvoke;
 import com.my.micheal.spring.invoke.Invoke;
+import com.my.micheal.spring.registry.RegistryCenter;
+import com.my.micheal.spring.registry.RegistryDelegate;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.FactoryBean;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
-import java.applet.AppletContext;
 import java.lang.reflect.Proxy;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-public class Reference implements FactoryBean , ApplicationContextAware {
+public class Reference implements FactoryBean , ApplicationContextAware , InitializingBean {
 
 
     private String id;
@@ -27,6 +31,9 @@ public class Reference implements FactoryBean , ApplicationContextAware {
     private Invoke invoke;
 
     private ApplicationContext applicationContext;
+
+
+    private static List<String> registryServices = new ArrayList<>();
 
     private static Map<String, Invoke> protocols = new HashMap<>();
 
@@ -68,6 +75,10 @@ public class Reference implements FactoryBean , ApplicationContextAware {
         this.protocol = protocol;
     }
 
+    public static List<String> getRegistryServices() {
+        return registryServices;
+    }
+
     @Override
     public Object getObject() throws Exception {
         if(protocol != null && !"".equals(protocol)){
@@ -107,5 +118,10 @@ public class Reference implements FactoryBean , ApplicationContextAware {
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
+    }
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        registryServices = RegistryDelegate.getAllServices(id,applicationContext);
     }
 }
