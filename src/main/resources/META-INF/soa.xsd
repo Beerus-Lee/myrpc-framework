@@ -38,6 +38,7 @@
         <xsd:attribute name="id" type="xsd:string"></xsd:attribute>
         <xsd:attribute name="interface" type="xsd:string"></xsd:attribute>
         <xsd:attribute name="ref" type="xsd:string"></xsd:attribute>
+        <xsd:attribute name="fetch" type="xsd:string"></xsd:attribute>
     </xsd:complexType>
 </xsd:element>
 

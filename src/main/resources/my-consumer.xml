@@ -9,5 +9,5 @@
         default-lazy-init="true">
     <micheal:registry protocol="redis" address="micheal01:6379" id="redis"></micheal:registry>
     <micheal:reference id="demoService" check="false" interface="com.my.micheal.demo.service.DemoService"/>
-    <micheal:protocol id="protocol" host="micheal01" port="8081" name="http"></micheal:protocol>
+    <micheal:protocol id="protocol" host="micheal01" port="8081" name="netty"></micheal:protocol>
 </beans>

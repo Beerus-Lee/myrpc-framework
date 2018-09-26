@@ -7,7 +7,6 @@ public class HttpInvoke implements Invoke {
 
     @Override
     public String invoke(Invocation invocation) throws Exception {
-        System.out.println("调用httpInvoke=========,当前服务列表为："+ JSONObject.toJSONString(Reference.getRegistryServices()));
         return null;
     }
 }

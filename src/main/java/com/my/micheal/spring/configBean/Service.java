@@ -1,18 +1,21 @@
 package com.my.micheal.spring.configBean;
 
-import com.my.micheal.spring.registry.RegistryCenter;
+import com.my.micheal.spring.nettyUtil.NettyDelegate;
 import com.my.micheal.spring.registry.RegistryDelegate;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.ContextRefreshedEvent;
 
-public class Service implements InitializingBean , ApplicationContextAware {
+public class Service implements InitializingBean , ApplicationContextAware , ApplicationListener<ContextRefreshedEvent> {
     private  String id;
 
     private String intf;
 
     private String ref;
+
 
     private ApplicationContext applicationContext;
 
@@ -40,10 +43,12 @@ public class Service implements InitializingBean , ApplicationContextAware {
         this.ref = ref;
     }
 
+
     @Override
     public void afterPropertiesSet() throws Exception {
 
         RegistryDelegate.registry(this,applicationContext);
+
 
         System.out.println("service 属性加载完毕");
 
@@ -53,5 +58,20 @@ public class Service implements InitializingBean , ApplicationContextAware {
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
+    }
+
+    @Override
+    public void onApplicationEvent(ContextRefreshedEvent event) {
+        new Thread(() -> {
+            {
+                try {
+                    Protocol protocol = applicationContext.getBean(Protocol.class);
+                    String msg = NettyDelegate.startService(protocol.getPort());
+                    System.out.println("成功启动netty服务：" + msg);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 }

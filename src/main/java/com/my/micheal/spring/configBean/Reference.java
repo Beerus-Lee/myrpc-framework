@@ -3,8 +3,12 @@ package com.my.micheal.spring.configBean;
 import com.my.micheal.spring.advice.InvokeInvocationHandler;
 import com.my.micheal.spring.invoke.HttpInvoke;
 import com.my.micheal.spring.invoke.Invoke;
+import com.my.micheal.spring.invoke.NettyInvoke;
 import com.my.micheal.spring.registry.RegistryCenter;
 import com.my.micheal.spring.registry.RegistryDelegate;
+import com.my.micheal.spring.selector.RandomSelector;
+import com.my.micheal.spring.selector.RoundRobinSelector;
+import com.my.micheal.spring.selector.Selector;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.InitializingBean;
@@ -28,18 +32,42 @@ public class Reference implements FactoryBean , ApplicationContextAware , Initia
 
     private String protocol;
 
+    private String fetch;
+
     private Invoke invoke;
+
+    private Selector selector;
 
     private ApplicationContext applicationContext;
 
+    public Selector getSelector() {
+        return selector;
+    }
 
-    private static List<String> registryServices = new ArrayList<>();
+    public String getFetch() {
+        return fetch;
+    }
+
+    public void setFetch(String fetch) {
+        this.fetch = fetch;
+    }
+
+    public void setSelector(Selector selector) {
+        this.selector = selector;
+    }
+
+    private  List<String> registryServices = new ArrayList<>();
 
     private static Map<String, Invoke> protocols = new HashMap<>();
 
+    private static Map<String, Selector> selectors = new HashMap<>();
+
     static {
         protocols.put("http",new HttpInvoke());
-        protocols.put("netty",new HttpInvoke());
+        protocols.put("netty",new NettyInvoke());
+
+        selectors.put("random",new RandomSelector());
+        selectors.put("robin",new RoundRobinSelector());
     }
 
 
@@ -75,7 +103,7 @@ public class Reference implements FactoryBean , ApplicationContextAware , Initia
         this.protocol = protocol;
     }
 
-    public static List<String> getRegistryServices() {
+    public  List<String> getRegistryServices() {
         return registryServices;
     }
 
@@ -90,6 +118,12 @@ public class Reference implements FactoryBean , ApplicationContextAware , Initia
             } else {
                 invoke = protocols.get("http");
             }
+        }
+
+        if(fetch != null && !"".endsWith(fetch)) {
+            selector = selectors.get(fetch);
+        } else {
+            selector = selectors.get("random");
         }
 
         Object proxy = Proxy.newProxyInstance(this.getClass().getClassLoader(),new Class<?>[]{Class.forName(intf)},new InvokeInvocationHandler(invoke,this));
@@ -122,6 +156,6 @@ public class Reference implements FactoryBean , ApplicationContextAware , Initia
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        registryServices = RegistryDelegate.getAllServices(id,applicationContext);
+        this.registryServices = RegistryDelegate.getAllServices(id,applicationContext);
     }
 }

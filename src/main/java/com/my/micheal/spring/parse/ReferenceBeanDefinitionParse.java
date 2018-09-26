@@ -23,6 +23,7 @@ public class ReferenceBeanDefinitionParse implements BeanDefinitionParser {
         String intf = element.getAttribute("interface");
         String check = element.getAttribute("check");
         String protocol = element.getAttribute("protocol");
+        String fetch = element.getAttribute("fetch");
 
         if(id != null && !"".equals(id)){
             if(parserContext.getRegistry().containsBeanDefinition(id)){
@@ -43,6 +44,11 @@ public class ReferenceBeanDefinitionParse implements BeanDefinitionParser {
         if(check != null && !"".equals(check)){
 
             beanDefinition.getPropertyValues().add("check",check);
+        }
+
+        if(fetch != null && !"".equals(fetch)){
+
+            beanDefinition.getPropertyValues().add("fetch",fetch);
         }
 
         if(protocol != null && !"".equals(protocol)){

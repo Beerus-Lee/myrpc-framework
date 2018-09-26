@@ -7,7 +7,7 @@
                            http://www.my.com/schema/soa.xsd"
        xmlns:micheal="http://www.my.com/schema/soa"
         default-lazy-init="true">
-    <micheal:protocol id="protocol" host="micheal01" port="8081" name="http"></micheal:protocol>
+    <micheal:protocol id="protocol" host="micheal01" port="8081" name="netty"></micheal:protocol>
 <micheal:registry protocol="redis" address="micheal01:6379" id="redis"></micheal:registry>
 <micheal:service id="demoService"  interface="com.my.micheal.demo.service.DemoService" ref="com.my.micheal.demo.service.DemoServiceImpl"  ></micheal:service>
 </beans>
