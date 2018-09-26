@@ -14,6 +14,9 @@ public class NettyInvoke implements Invoke {
         System.out.println("获取服务列表"+ JSONObject.toJSONString(servicesList));
         Selector selector = invocation.getReference().getSelector();
         NodeInfo nodeInfo = selector.selectNode(servicesList);
+        nodeInfo.setParams(invocation.getObjects());
+        nodeInfo.setParamTypes(invocation.getParamTypes());
+
         String msg = NettyDelegate.connectionService(nodeInfo);
 
         return msg;

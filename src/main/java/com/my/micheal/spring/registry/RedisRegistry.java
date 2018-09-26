@@ -45,7 +45,7 @@ public class RedisRegistry implements RegistryCenter{
                         JSONObject object = JSONObject.parseObject(server);
                         Set<String> addresses = object.keySet();
                         for(String addr : addresses) {
-                            if(addr.equals(protocol.getHost() + protocol.getPort())) {
+                            if(addr.equals(protocol.getHost() +":"+ protocol.getPort())) {
                                 newServicesList.add(parentObject.toJSONString());
                             } else {
                                 newServicesList.add(server);

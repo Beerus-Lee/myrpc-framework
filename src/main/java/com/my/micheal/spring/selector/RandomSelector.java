@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 public class RandomSelector implements Selector {
     @Override
@@ -12,11 +13,15 @@ public class RandomSelector implements Selector {
         int randomNum = random.nextInt(services.size());
         String service = services.get(randomNum);
         JSONObject jsonObject = JSONObject.parseObject(service);
+        Set<String> keys= jsonObject.keySet();
         NodeInfo nodeInfo = new NodeInfo();
-        nodeInfo.setHost(jsonObject.getString("host"));
-        nodeInfo.setPort(jsonObject.getString("port"));
-        nodeInfo.setRef(jsonObject.getString("ref"));
-
+        for(String key :keys) {
+            String json = jsonObject.getString(key);
+            JSONObject node = JSONObject.parseObject(json);
+            nodeInfo.setHost(node.getString("host"));
+            nodeInfo.setPort(node.getString("port"));
+            nodeInfo.setRef(JSONObject.parseObject(node.getString("service")).getString("ref"));
+        }
         return nodeInfo;
     }
 }

@@ -11,6 +11,8 @@ public class Invocation {
 
     private Object[] objects;
 
+    private Class<?>[] paramTypes;
+
     private Reference reference;
 
     public Reference getReference() {
@@ -43,5 +45,13 @@ public class Invocation {
 
     public void setObjects(Object[] objects) {
         this.objects = objects;
+    }
+
+    public Class<?>[] getParamTypes() {
+        return paramTypes;
+    }
+
+    public void setParamTypes(Class<?>[] paramTypes) {
+        this.paramTypes = paramTypes;
     }
 }

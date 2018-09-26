@@ -7,6 +7,26 @@ public class NodeInfo {
 
     private String port;
 
+    private Object[] params;
+
+    private Class<?>[] paramTypes;
+
+    public Object[] getParams() {
+        return params;
+    }
+
+    public void setParams(Object[] params) {
+        this.params = params;
+    }
+
+    public Class<?>[] getParamTypes() {
+        return paramTypes;
+    }
+
+    public void setParamTypes(Class<?>[] paramTypes) {
+        this.paramTypes = paramTypes;
+    }
+
     public String getRef() {
         return ref;
     }
