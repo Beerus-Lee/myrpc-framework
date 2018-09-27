@@ -12,13 +12,16 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class NettyClientHandler extends ChannelInboundHandlerAdapter {
     private final byte[] request;
 
+    private StringBuffer resultMsg;
+
     private AtomicInteger atomicInteger = new AtomicInteger(0);
 
     /**
      * 创建一个客户端 handler.
      */
-    public NettyClientHandler(NodeInfo nodeInfo) {
-        request ="11111111111111111".getBytes();
+    public NettyClientHandler(StringBuffer resultMsg,NodeInfo nodeInfo) {
+        request =JSONObject.toJSONString(nodeInfo).getBytes();
+        this.resultMsg = resultMsg;
     }
     //(2.1)
     @Override
@@ -39,12 +42,15 @@ public class NettyClientHandler extends ChannelInboundHandlerAdapter {
         ByteBuf message = (ByteBuf) msg;
         byte[] response = new byte[message.readableBytes()];
         message.readBytes(response);
-
+        this.resultMsg = resultMsg.append(new String(response));
         System.out.println(atomicInteger.getAndIncrement() + "receive from server:" + new String(response));
+        ctx.close();
     }
+
 
     @Override
     public void channelReadComplete(ChannelHandlerContext ctx) {
+
     }
 
     @Override
@@ -52,4 +58,6 @@ public class NettyClientHandler extends ChannelInboundHandlerAdapter {
         cause.printStackTrace();
         ctx.close();
     }
+
+
 }

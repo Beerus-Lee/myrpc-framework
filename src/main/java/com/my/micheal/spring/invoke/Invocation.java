@@ -11,9 +11,19 @@ public class Invocation {
 
     private Object[] objects;
 
-    private Class<?>[] paramTypes;
+    private Object[] paramTypes;
 
     private Reference reference;
+
+    private String returnType;
+
+    public String getReturnType() {
+        return returnType;
+    }
+
+    public void setReturnType(String returnType) {
+        this.returnType = returnType;
+    }
 
     public Reference getReference() {
         return reference;
@@ -47,11 +57,11 @@ public class Invocation {
         this.objects = objects;
     }
 
-    public Class<?>[] getParamTypes() {
+    public Object[] getParamTypes() {
         return paramTypes;
     }
 
-    public void setParamTypes(Class<?>[] paramTypes) {
+    public void setParamTypes(Object[] paramTypes) {
         this.paramTypes = paramTypes;
     }
 }

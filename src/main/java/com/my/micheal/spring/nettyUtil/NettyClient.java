@@ -8,8 +8,11 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 
 public class NettyClient {
+    private static NettyClientHandler nettyClientHandler ;
 
-    public static void sendMsg(NodeInfo nodeInfo) throws Exception {
+    public static String sendMsg(NodeInfo nodeInfo) throws Exception {
+        StringBuffer message = new StringBuffer();
+        nettyClientHandler = new NettyClientHandler(message, nodeInfo);
         EventLoopGroup group = new NioEventLoopGroup();
         try {//1.2 创建启动类Bootstrap实例，用来设置客户端相关参数
             Bootstrap b = new Bootstrap();
@@ -21,19 +24,19 @@ public class NettyClient {
                         public void initChannel(SocketChannel ch) throws Exception {
                             ChannelPipeline p = ch.pipeline();
 
-                            p.addLast(new NettyClientHandler(nodeInfo));
+                            p.addLast(nettyClientHandler);
 
                         }
                     });
 
             // 1.3启动链接
-            ChannelFuture f = b.connect(nodeInfo.getHost(), Integer.parseInt(nodeInfo.getPort())).sync();
+            ChannelFuture f = b.connect(nodeInfo.getHost(), Integer.parseInt(nodeInfo.getPort())).channel().closeFuture().await();
+            return message.toString();
 
-            //1.4 同步等待链接断开
-            f.channel().closeFuture().sync();
         } finally {
             // 1.5优雅关闭线程池
             group.shutdownGracefully();
         }
     }
+
 }

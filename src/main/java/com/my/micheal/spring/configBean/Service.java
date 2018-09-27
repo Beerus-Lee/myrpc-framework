@@ -66,8 +66,8 @@ public class Service implements InitializingBean , ApplicationContextAware , App
             {
                 try {
                     Protocol protocol = applicationContext.getBean(Protocol.class);
-                    String msg = NettyDelegate.startService(protocol.getPort());
-                    System.out.println("成功启动netty服务：" + msg);
+                    NettyDelegate.startService(protocol.getPort());
+                    System.out.println("成功启动netty服务：");
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

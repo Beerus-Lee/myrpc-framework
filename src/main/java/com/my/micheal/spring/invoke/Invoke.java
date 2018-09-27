@@ -1,8 +1,8 @@
 package com.my.micheal.spring.invoke;
 
 
-public interface Invoke {
+public interface Invoke <T>{
 
-    String invoke(Invocation invocation) throws Exception;
+    T invoke(Invocation invocation) throws Exception;
 
 }

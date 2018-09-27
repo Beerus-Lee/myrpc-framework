@@ -7,9 +7,11 @@ public class NodeInfo {
 
     private String port;
 
+    private String methodName;
+
     private Object[] params;
 
-    private Class<?>[] paramTypes;
+    private Object[] paramTypes;
 
     public Object[] getParams() {
         return params;
@@ -19,11 +21,11 @@ public class NodeInfo {
         this.params = params;
     }
 
-    public Class<?>[] getParamTypes() {
+    public Object[] getParamTypes() {
         return paramTypes;
     }
 
-    public void setParamTypes(Class<?>[] paramTypes) {
+    public void setParamTypes(Object[] paramTypes) {
         this.paramTypes = paramTypes;
     }
 
@@ -49,5 +51,13 @@ public class NodeInfo {
 
     public void setPort(String port) {
         this.port = port;
+    }
+
+    public String getMethodName() {
+        return methodName;
+    }
+
+    public void setMethodName(String methodName) {
+        this.methodName = methodName;
     }
 }

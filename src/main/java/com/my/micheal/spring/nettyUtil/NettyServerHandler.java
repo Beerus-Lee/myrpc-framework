@@ -1,12 +1,15 @@
 package com.my.micheal.spring.nettyUtil;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.my.micheal.spring.selector.NodeInfo;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class NettyServerHandler extends ChannelInboundHandlerAdapter {
@@ -24,14 +27,20 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
         ByteBuf message = (ByteBuf) msg;
         byte[] response = new byte[message.readableBytes()];
         message.readBytes(response);
-        System.out.println(atomicInteger.getAndIncrement() + "receive client info: " + new String(response));
+        String result = new String(response);
+        NodeInfo nodeInfo = JSONObject.toJavaObject(JSONObject.parseObject(result),NodeInfo.class);
+        Class clazz = Class.forName(nodeInfo.getRef());
+        List<Class<?>> clazzType = new ArrayList<>();
+        for(Object paramType : nodeInfo.getParamTypes()) {
+            clazzType.add(Class.forName(paramType.toString()));
+        }
+        Method method = clazz.getDeclaredMethod(nodeInfo.getMethodName(),clazzType.toArray(new Class<?>[]{}));
 
-        String sendContent = "hello client ,im server";
-        ByteBuf seneMsg = Unpooled.buffer(sendContent.length());
-        seneMsg.writeBytes(sendContent.getBytes());
+        Object resp = method.invoke(clazz.newInstance(),nodeInfo.getParams());
 
+        ByteBuf seneMsg = Unpooled.buffer(JSONObject.toJSONString(resp).length());
+        seneMsg.writeBytes(JSONObject.toJSONString(resp).getBytes());
         ctx.writeAndFlush(seneMsg);
-        System.out.println("send info to client:" + sendContent);
 
     }
 
